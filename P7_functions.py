@@ -49,3 +49,5 @@ def EDA_continous(data):
         sns.boxplot(x=data[col],
                     data=data)
         fig.tight_layout(pad=0.8)
+
+        plt.show()
