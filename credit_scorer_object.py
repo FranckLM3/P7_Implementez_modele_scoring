@@ -3,8 +3,6 @@ import pandas as pd
 import pickle
 import re
 
-from lightgbm import LGBMClassifier
-
 
 class credit_scorer:
     '''Create a object to implement credit scoring.
@@ -16,7 +14,7 @@ class credit_scorer:
             False : 'No payement difficulties',
             True : 'Payement difficulties'}
     
-    def get_model(self, model_path:str) -> LGBMClassifier:
+    def get_model(self, model_path:str):
         '''Open the pkl file which store the model.
         Arguments: 
             model_path: Path model with pkl extension
@@ -49,7 +47,7 @@ class credit_scorer:
         '''
         try: 
             # Read data
-            df = pd.read_csv('data/application_train_sample.csv',
+            df = pd.read_csv('P7_Implementez_modele_scoring/data/application_train_sample.csv',
                             engine='pyarrow',
                             verbose=False,
                             encoding='ISO-8859-1',
