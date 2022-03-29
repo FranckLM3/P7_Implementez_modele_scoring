@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from credit_scorer_object import credit_scorer
 from pydantic import BaseModel
 
-from lightgbm import LGBMClassifier
 
 #create the application
 app = FastAPI(
