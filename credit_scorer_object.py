@@ -49,7 +49,7 @@ class credit_scorer:
         '''
         try: 
             # Read data
-            df = pd.read_csv('data/application_train.csv',
+            df = pd.read_csv('data/application_train_sample.csv',
                             engine='pyarrow',
                             verbose=False,
                             encoding='ISO-8859-1',
