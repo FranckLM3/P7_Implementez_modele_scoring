@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from credit_scorer_object import credit_scorer
 from pydantic import BaseModel
-
+import pandas as pd
 from lightgbm import LGBMClassifier
 
 #create the application
@@ -20,10 +20,16 @@ scorer = credit_scorer('preprocessor', 'classifier')
 class Customer(BaseModel):
     id: int
 
+df = pd.read_csv('application_train_sample.csv',
+                            engine='pyarrow',
+                            verbose=False,
+                            encoding='ISO-8859-1',
+                            )
+
 @app.post("/",tags = ["credit_score"])
 def get_prediction(client_id:Customer):
 
-    features = scorer.transfrom(client_id.dict())
+    features = scorer.transfrom(df, client_id.dict())
     pred = scorer.make_prediction(features)
 
     return JSONResponse({"Credit score":pred})

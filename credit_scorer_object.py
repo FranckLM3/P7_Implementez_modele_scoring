@@ -42,16 +42,12 @@ class credit_scorer:
         
         return preprocessor
 
-    def transfrom(self, client_id:dict):
+    def transfrom(self, data, client_id:dict):
         '''Preprocess the features for prediction
         '''
         try: 
             # Read data
-            df = pd.read_csv('application_train_sample.csv',
-                            engine='pyarrow',
-                            verbose=False,
-                            encoding='ISO-8859-1',
-                            )
+            df = data.copy()
             id = client_id['id']
             df = df[df['SK_ID_CURR'] == id]
 
