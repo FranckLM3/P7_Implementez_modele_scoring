@@ -47,7 +47,7 @@ class credit_scorer:
         '''
         try: 
             # Read data
-            df = pd.read_csv('P7_Implementez_modele_scoring/data/application_train_sample.csv',
+            df = pd.read_csv('application_train_sample.csv',
                             engine='pyarrow',
                             verbose=False,
                             encoding='ISO-8859-1',
