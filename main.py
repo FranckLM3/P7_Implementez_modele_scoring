@@ -20,7 +20,7 @@ scorer = credit_scorer('preprocessor', 'classifier')
 class Customer(BaseModel):
     id: int
 
-df = pd.read_csv('application_train_sample.csv',
+df = pd.read_csv('data/application_train_sample.csv',
                             engine='pyarrow',
                             verbose=False,
                             encoding='ISO-8859-1',
