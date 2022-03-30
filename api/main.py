@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from credit_scorer_object import credit_scorer
+from api.credit_scorer_object import credit_scorer
 from pydantic import BaseModel
 import pandas as pd
-from lightgbm import LGBMClassifier
 
 #create the application
 app = FastAPI(
@@ -14,7 +13,7 @@ app = FastAPI(
 
 #creating the classifier
 
-scorer = credit_scorer('preprocessor', 'classifier')
+scorer = credit_scorer('api/preprocessor', 'api/classifier')
 
 #Model
 class Customer(BaseModel):
