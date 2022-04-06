@@ -27,7 +27,6 @@ logger = logging.getLogger(__name__)
 
 # Read data
 df = pd.read_csv('data/model_dataset.csv',
-            nrows=10000,
             low_memory=False,
             verbose=False,
             encoding='ISO-8859-1',
@@ -181,7 +180,8 @@ if __name__ == "__main__":
             reg alpha=%f
             reg lambda=%f
             min split gain=%f
-            min child weight=%f""" % (n_estimators,
+            min child weight=%f
+            scale_pos_weight=%f""" % (n_estimators,
                                     learning_rate,
                                     num_leaves,
                                     colsample_bytree,
@@ -190,7 +190,8 @@ if __name__ == "__main__":
                                     reg_alpha,
                                     reg_lambda,
                                     min_split_gain,
-                                    min_child_weight))
+                                    min_child_weight,
+                                    scale_pos_weight))
         
         print("  AUC: %s" % auc)
         print("  Recall: %s" % recall)

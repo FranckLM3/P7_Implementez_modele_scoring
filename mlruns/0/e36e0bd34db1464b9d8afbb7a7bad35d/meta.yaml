@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/franck/Documents/P7_Implementez_modele_scoring/mlruns/0/e36e0bd34db1464b9d8afbb7a7bad35d/artifacts
+end_time: 1649260921874
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: e36e0bd34db1464b9d8afbb7a7bad35d
+run_uuid: e36e0bd34db1464b9d8afbb7a7bad35d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1649260863110
+status: 3
+tags: []
+user_id: franck
