@@ -13,6 +13,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
+from sklearn.feature_selection import SelectFromModel
 
 import warnings
 import mlflow
@@ -23,6 +24,15 @@ import logging
 
 logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
+
+# Read data
+df = pd.read_csv('data/model_dataset.csv',
+            nrows=10000,
+            low_memory=False,
+            verbose=False,
+            encoding='ISO-8859-1',
+            dtype={'Special': 'object'}
+            )
 
 def eval_metrics(actual, pred):
     
@@ -42,43 +52,12 @@ def eval_metrics(actual, pred):
 
     return auc, recall, precision, f1, thresholds_value
 
-def application_train_test():
+def preprocessing(df):
     # Read data
-    df = pd.read_csv('data/application_train.csv',
-                    low_memory=False,
-                    verbose=False,
-                    encoding='ISO-8859-1',
-                    dtype={'Special': 'object'}
-                    )
+    
+    df = df.replace([np.inf, -np.inf], np.nan)
 
-    # NaN values for DAYS_EMPLOYED: 365.243 -> nan
-    df['DAYS_EMPLOYED'].replace(365243, np.nan, inplace= True)
-    # Some simple new features (percentages)
-    df['DAYS_EMPLOYED_PERC'] = df['DAYS_EMPLOYED'] / df['DAYS_BIRTH']
-    df['INCOME_CREDIT_PERC'] = df['AMT_INCOME_TOTAL'] / df['AMT_CREDIT']
-    df['INCOME_PER_PERSON'] = df['AMT_INCOME_TOTAL'] / df['CNT_FAM_MEMBERS']
-    df['ANNUITY_INCOME_PERC'] = df['AMT_ANNUITY'] / df['AMT_INCOME_TOTAL']
-    df['PAYMENT_RATE'] = df['AMT_ANNUITY'] / df['AMT_CREDIT']
-
-    # Categorical features with Binary encode (0 or 1; two categories)
-    for bin_feature in ['CODE_GENDER', 'FLAG_OWN_CAR', 'FLAG_OWN_REALTY']:
-        df[bin_feature], uniques = pd.factorize(df[bin_feature])
-
-    # Remove _MODE and _MEDI and FLAG_DOCUMENT features (EDA)
-    rm = []
-    num_col = df.select_dtypes(include=np.number).columns.to_list()
-    for col in df[num_col].columns:
-        if re.search('_MODE|_MEDI|FLAG_DOCUMENT_', col):
-            rm.append(col)
-    # Keep Total AREA MODE as it is not repeated
-    rm.remove('TOTALAREA_MODE')
-
-    # Remove unique ID
-    rm.append('SK_ID_CURR')
-
-    df.drop(rm, axis=1, inplace=True)
-
-    X = df.drop('TARGET', axis=1)
+    X = df.drop(['TARGET', 'SK_ID_CURR'], axis=1)
     y = df['TARGET']
 
 
@@ -94,16 +73,24 @@ def application_train_test():
 
     preprocessor = ColumnTransformer(
     transformers=[('num', numeric_transformer, numeric_features),
-                    ('cat', categorical_transformer, categorical_features)
+                  ('cat', categorical_transformer, categorical_features)
                     ])
-
     X = preprocessor.fit_transform(X)
 
+    # Feature selection
+    sfm = SelectFromModel(LGBMClassifier(n_jobs=-1))
+   
+    sfm.fit(X, y)
+    X = sfm.transform(X)
+
+    print('X shape after features selection: ', X.shape)
+    
     # Save feature names to future features importance eval
     onehot_columns = list(preprocessor.named_transformers_['cat'].named_steps['encoder'].\
                           get_feature_names_out(input_features=categorical_features))
     numeric_features_list = list(numeric_features)
     feats = np.concatenate((numeric_features_list, onehot_columns))
+    feats = feats[sfm.get_support()]
 
     df_encoded = pd.DataFrame(X, columns=feats)
     df_encoded['TARGET'] = df['TARGET']
@@ -127,37 +114,39 @@ def application_train_test():
                                          random_state=123)
 
     print("Train samples: {}, test samples: {}".format(df_train.shape, df_test.shape))
+
     del df
     gc.collect()
     return df_train, df_test
 
 if __name__ == "__main__":
-    warnings.filterwarnings("ignore")
+    #warnings.filterwarnings("ignore")
     np.random.seed(40)
 
     try:
-        df_train, df_test = application_train_test()
+        df_train, df_test = preprocessing(df)
     except Exception as e:
         logger.exception(
             "Unable to load training & test CSV. Error: %s", e
         )
 
     # Model fitting for MLflow
-    train_x = df_train.drop([('TARGET')], axis=1)
-    test_x = df_test.drop([('TARGET')], axis=1)
+    train_x = df_train.drop(['TARGET'], axis=1)
+    test_x = df_test.drop(['TARGET'], axis=1)
     train_y = df_train['TARGET']
     test_y = df_test[['TARGET']]
 
     n_estimators=1000
     learning_rate=0.02
+    colsample_bytree=0.2352167642701535
+    max_depth=9
+    min_child_weight=34.67802513470199
+    min_split_gain=0.772886577362599
     num_leaves=44
-    colsample_bytree=0.2782455842129526
-    subsample=0.9835209048870284
-    max_depth=8
-    reg_alpha=0.29323776895986786
-    reg_lambda=00.8944170104864534
-    min_split_gain=0.13787924996910783
-    min_child_weight=44.68845496978565
+    reg_alpha=0.6466454272437308
+    reg_lambda=0.883716377059081
+    subsample=0.1498951237319723
+    scale_pos_weight=11.387150050352467
 
     with mlflow.start_run():
         clf = LGBMClassifier(
@@ -171,6 +160,7 @@ if __name__ == "__main__":
             reg_lambda=reg_lambda,
             min_split_gain=min_split_gain,
             min_child_weight=min_child_weight,
+            scale_pos_weight=scale_pos_weight,
             silent=-1,
             verbose=-1,
             )
@@ -217,7 +207,8 @@ if __name__ == "__main__":
         mlflow.log_param("reg alpha", reg_alpha)
         mlflow.log_param("reg lambda", reg_lambda)
         mlflow.log_param("min split gain", min_split_gain)
-        mlflow.log_param("rmin child weight", min_child_weight)
+        mlflow.log_param("min child weight", min_child_weight)
+        mlflow.log_param("Scale pos weight", scale_pos_weight)
 
         mlflow.log_metric("Thresold", thresholds_value)
         mlflow.log_metric("AUC", auc)
@@ -232,9 +223,6 @@ if __name__ == "__main__":
         if tracking_url_type_store != "file":
 
             # Register the model
-            # There are other ways to use the Model Registry, which depends on the use case,
-            # please refer to the doc for more information:
-            # https://mlflow.org/docs/latest/model-registry.html#api-workflow
-            mlflow.sklearn.log_model(clf, "model", registered_model_name="ElasticnetWineModel")
+            mlflow.sklearn.log_model(clf, "classifier", registered_model_name="LightGBM classifier")
         else:
-            mlflow.sklearn.log_model(clf, "model")
+            mlflow.sklearn.log_model(clf, "classifier")
