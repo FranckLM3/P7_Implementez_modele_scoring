@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from api.credit_scorer_object import credit_scorer
 from pydantic import BaseModel
@@ -13,13 +13,13 @@ app = FastAPI(
 
 #creating the classifier
 
-scorer = credit_scorer('api/preprocessor', 'api/classifier')
+scorer = credit_scorer('api/pipeline', 'api/classifier')
 
 #Model
 class Customer(BaseModel):
     id: int
 
-df = pd.read_csv('data/application_train_sample.csv',
+df = pd.read_csv('data/model_dataset.csv',
                             engine='pyarrow',
                             verbose=False,
                             encoding='ISO-8859-1',
@@ -28,7 +28,21 @@ df = pd.read_csv('data/application_train_sample.csv',
 @app.post("/",tags = ["credit_score"])
 def get_prediction(client_id:Customer):
 
-    features = scorer.transfrom(df, client_id.dict())
-    pred = scorer.make_prediction(features)
+    if client_id.dict()['id'] not in df['SK_ID_CURR'].unique():
+        # the exception is raised, not returned - you will get a validation
+        # error otherwise.
+        # 2
+        raise HTTPException(
+            status_code=404, detail=f"Client ID {client_id.dict()['id']} not found")
 
-    return JSONResponse({"Credit score":pred})
+    features = scorer.transfrom(df, client_id.dict())
+    prob, info_default = scorer.make_prediction(features)
+
+    return JSONResponse({"Credit score":round(prob[0], 3),
+                         "Advice": info_default})
+'''
+@app.get("/client/{client_id}")
+async def read_id(client_id:Customer):
+    if client_id.dict()['id'] not in df['SK_ID_CURR'].unique():
+        raise HTTPException(status_code=404, detail="Item not found")
+    return {"id": df['SK_ID_CURR'].unique()[client_id.dict()['id']]}'''

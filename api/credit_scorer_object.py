@@ -45,44 +45,17 @@ class credit_scorer:
     def transfrom(self, data, client_id:dict):
         '''Preprocess the features for prediction
         '''
-        try: 
-            # Read data
-            df = data.copy()
-            id = client_id['id']
-            df = df[df['SK_ID_CURR'] == id]
 
-            # NaN values for DAYS_EMPLOYED: 365.243 -> nan
-            df['DAYS_EMPLOYED'].replace(365243, np.nan, inplace= True)
-            # Some simple new features (percentages)
-            df['DAYS_EMPLOYED_PERC'] = df['DAYS_EMPLOYED'] / df['DAYS_BIRTH']
-            df['INCOME_CREDIT_PERC'] = df['AMT_INCOME_TOTAL'] / df['AMT_CREDIT']
-            df['INCOME_PER_PERSON'] = df['AMT_INCOME_TOTAL'] / df['CNT_FAM_MEMBERS']
-            df['ANNUITY_INCOME_PERC'] = df['AMT_ANNUITY'] / df['AMT_INCOME_TOTAL']
-            df['PAYMENT_RATE'] = df['AMT_ANNUITY'] / df['AMT_CREDIT']
+        # Read data
+        df = data.copy()
+        df = df.replace([np.inf, -np.inf], np.nan)
+        id = client_id['id']
+        df = df[df['SK_ID_CURR'] == id]
 
-            # Categorical features with Binary encode (0 or 1; two categories)
-            for bin_feature in ['CODE_GENDER', 'FLAG_OWN_CAR', 'FLAG_OWN_REALTY']:
-                df[bin_feature], uniques = pd.factorize(df[bin_feature])
+        X = df.drop(['TARGET', 'SK_ID_CURR'], axis=1)
+        y = df['TARGET']
 
-            # Remove _MODE and _MEDI and FLAG_DOCUMENT features (EDA)
-            rm = []
-            num_col = df.select_dtypes(include=np.number).columns.to_list()
-            for col in df[num_col].columns:
-                if re.search('_MODE|_MEDI|FLAG_DOCUMENT_', col):
-                    rm.append(col)
-            # Keep Total AREA MODE as it is not repeated
-            rm.remove('TOTALAREA_MODE')
-
-            # Remove unique ID
-            rm.append('SK_ID_CURR')
-
-            df.drop(rm, axis=1, inplace=True)
-
-            X = df.drop('TARGET', axis=1)
-
-            X = self.preprocessor.transform(X)
-        except: 
-            X = 'This client is not in the database...'
+        X = self.preprocessor.transform(X)
 
         return X
 
@@ -94,13 +67,11 @@ class credit_scorer:
         return:
             cluster: str
         '''
-        if isinstance(features, str):
-            score = 'This client is not in the database...'
-        else: 
-            pred = self.clf.predict_proba(features)[:, 1]
 
-            pred = (pred >= 0.08)[0]
+        prob = self.clf.predict_proba(features)[:, 1]
 
-            score = self.scorer_meaning[pred]
+        pred = (prob >= 0.47)[0]
 
-        return score
+        score = self.scorer_meaning[pred]
+
+        return prob, score
