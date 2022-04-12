@@ -19,7 +19,7 @@ scorer = credit_scorer('api/pipeline', 'api/classifier')
 class Customer(BaseModel):
     id: int
 
-df = pd.read_csv('data/model_dataset.csv',
+df = pd.read_csv('dataset_sample.csv',
                             engine='pyarrow',
                             verbose=False,
                             encoding='ISO-8859-1',
@@ -29,9 +29,6 @@ df = pd.read_csv('data/model_dataset.csv',
 def get_prediction(client_id:Customer):
 
     if client_id.dict()['id'] not in df['SK_ID_CURR'].unique():
-        # the exception is raised, not returned - you will get a validation
-        # error otherwise.
-        # 2
         raise HTTPException(
             status_code=404, detail=f"Client ID {client_id.dict()['id']} not found")
 
@@ -40,9 +37,3 @@ def get_prediction(client_id:Customer):
 
     return JSONResponse({"Credit score":round(prob[0], 3),
                          "Advice": info_default})
-'''
-@app.get("/client/{client_id}")
-async def read_id(client_id:Customer):
-    if client_id.dict()['id'] not in df['SK_ID_CURR'].unique():
-        raise HTTPException(status_code=404, detail="Item not found")
-    return {"id": df['SK_ID_CURR'].unique()[client_id.dict()['id']]}'''
