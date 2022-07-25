@@ -6,6 +6,8 @@
 
 **Durée totale :** 120 heures
 
+Lien vers dashboard : https://francklm3-p7-dashboard-deploy-dashboard-67h1jz.streamlitapp.com/
+
 ## Background du projet :
 Vous êtes Data Scientist au sein d'une société financière, nommée "Prêt à dépenser",  qui propose des crédits à la consommation pour des personnes ayant peu ou pas du tout d'historique de prêt.
 L’entreprise souhaite développer un modèle de scoring de la probabilité de défaut de paiement du client pour étayer la décision d'accorder ou non un prêt à un client potentiel en s’appuyant sur des sources de données variées (données comportementales, données provenant d'autres institutions financières, etc.).
