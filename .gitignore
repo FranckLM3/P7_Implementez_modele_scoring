@@ -1,3 +1,38 @@
+# Fichiers bureautiques
 *.zip
 *.pptx
 *.docx
+*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Environnements virtuels
+.venv/
+venv/
+ENV/
+
+# Tests et linters
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# DVC
+/data/*.csv
+/data/*.parquet
+!.dvc/
