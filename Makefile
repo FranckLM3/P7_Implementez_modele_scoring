@@ -1,35 +1,27 @@
-# Makefile Simple - Credit Scoring
+# Makefile - Credit Scoring
 
 PYTHON := .venv/bin/python
-VENV := .venv/bin/python
 
-.PHONY: install train test help
+.PHONY: help install train test
 
-# Afficher l'aide
 help:
-	@echo "Commandes disponibles:"
-	@echo "  make install    - Installer le package credit_scoring"
-	@echo "  make train      - Entraîner le modèle LightGBM"
-	@echo "  make test       - Lancer les tests (optionnel)"
-	@echo ""
-	@echo "Vous pouvez aussi utiliser directement:"
-	@echo "  python scripts/train.py --data data/model_dataset.csv --out-dir artifacts"
+	@echo "Available commands:"
+	@echo "  make install    - Install package"
+	@echo "  make train      - Train LightGBM model"
+	@echo "  make test       - Run tests"
 
-# Installer le package (équivalent à: pip install -e .)
 install:
-	@echo "Installation du package credit_scoring..."
+	@echo "Installing package..."
 	$(PYTHON) -m pip install -U pip
 	$(PYTHON) -m pip install -e .
-	@echo "Installation terminée!"
+	@echo "Installation complete!"
 
-# Entraîner le modèle
 train:
-	@echo "Entraînement du modèle LightGBM..."
+	@echo "Training LightGBM model..."
 	$(PYTHON) scripts/train.py --data data/model_dataset.csv --out-dir artifacts
-	@echo "Entraînement terminé! Modèle dans: artifacts/pipeline.joblib"
+	@echo "Training complete! Model in: artifacts/pipeline.joblib"
 
-# Lancer les tests (optionnel)
 test:
-	@echo "Lancement des tests..."
-	$(PYTHON) -m pytest -q tests/
-	@echo "Tests terminés!"
+	@echo "Running tests..."
+	$(PYTHON) -m pytest tests/ -v
+	@echo "Tests complete!"

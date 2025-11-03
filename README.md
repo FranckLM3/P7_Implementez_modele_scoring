@@ -7,7 +7,7 @@
 
 ---
 
-## 🎯 Vue d'Ensemble
+## Vue d'Ensemble
 
 ### Contexte Business
 
@@ -36,7 +36,7 @@ Un système complet de scoring crédit comprenant :
 
 ---
 
-## 🏗️ Architecture Technique
+## Architecture Technique
 
 ### Stack Technologique
 
@@ -52,7 +52,6 @@ Un système complet de scoring crédit comprenant :
 - Streamlit (dashboard interactif)
 - Google Cloud Run (hébergement serverless)
 - Docker (containerisation)
-- GitHub Actions (CI/CD)
 
 **Data :**
 - Dataset : Kaggle Home Credit Default Risk
@@ -98,7 +97,7 @@ Un système complet de scoring crédit comprenant :
 
 ---
 
-## 🔬 Approche Data Science
+## Approche Data Science
 
 ### 1. Exploration et Nettoyage des Données
 
@@ -192,7 +191,7 @@ $$G\text{-}mean = \sqrt{TPR \times TNR} = \sqrt{Recall \times Specificity}$$
 
 ---
 
-## 🔍 Explicabilité (SHAP)
+## Explicabilité (SHAP)
 
 ### Pourquoi l'explicabilité ?
 
@@ -224,7 +223,7 @@ Facteurs augmentant le risque :
 
 ---
 
-## 🚀 Pipeline ML Production
+## Pipeline ML Production
 
 ### Architecture Pipeline
 
@@ -250,11 +249,11 @@ Pipeline([
 ```
 
 **Avantages :**
-- ✅ Preprocessing automatique sur nouvelles données
-- ✅ Sérialisable en un seul fichier (`pipeline.joblib`)
-- ✅ Reproductible (`random_state` fixe)
-- ✅ Versionnable (compatible Git LFS)
-- ✅ Prêt pour la production
+- Preprocessing automatique sur nouvelles données
+- Sérialisable en un seul fichier (`pipeline.joblib`)
+- Reproductible (`random_state` fixe)
+- Versionnable (compatible Git LFS)
+- Prêt pour la production
 
 ### Export et Déploiement
 
@@ -276,7 +275,7 @@ artifacts/
 
 ---
 
-## 🌐 API REST (FastAPI)
+## API REST (FastAPI)
 
 ### Endpoints Disponibles
 
@@ -318,7 +317,7 @@ curl -X POST "https://credit-score-api-572900860091.europe-west1.run.app/predict
 
 ---
 
-## 📊 Dashboard Interactif (Streamlit)
+## Dashboard Interactif (Streamlit)
 
 ### Fonctionnalités
 
@@ -386,22 +385,9 @@ Coverage: 85%
 - Tests de pipeline end-to-end
 - Tests de métriques
 
-### CI/CD (GitHub Actions)
-
-**Pipeline automatisé :**
-1. **Lint** : Vérification du code (Ruff)
-2. **Tests** : Exécution des tests unitaires
-3. **Build** : Construction de l'image Docker
-4. **Deploy** : Déploiement sur Cloud Run (si branche main)
-
-**Déclencheurs :**
-- Push sur main
-- Pull requests
-- Tags (releases)
-
 ---
 
-## 📈 Résultats et Impact Business
+## Résultats et Impact Business
 
 ### Métriques ML
 
@@ -432,7 +418,7 @@ Coverage: 85%
 
 ---
 
-## 💡 Défis Techniques Rencontrés
+## Défis Techniques Rencontrés
 
 ### 1. Déséquilibre des Classes
 
@@ -481,7 +467,7 @@ Coverage: 85%
 
 ---
 
-## 🔄 Évolution du Projet (Refactor 2025)
+## Évolution du Projet (Refactor 2025)
 
 ### Amélioration Continue
 
@@ -497,53 +483,51 @@ Le projet a été **entièrement refactorisé** en novembre 2025 pour :
 - Architecture modulaire (`src/credit_scoring/`)
 - Code réutilisable et testé
 - Pipeline sklearn unique
-- CI/CD avec GitHub Actions
-- Documentation claire (README, ARCHITECTURE, PORTFOLIO)
+- Documentation claire (README, ARCHITECTURE)
 
 ### Nouvelles Fonctionnalités
 
 **Ajouts techniques :**
-- ✅ Tests unitaires (pytest)
-- ✅ CI/CD (GitHub Actions)
-- ✅ CLI d'entraînement (`scripts/train.py`)
-- ✅ Pipeline sklearn complet
-- ✅ Documentation technique approfondie
+- Tests unitaires (pytest)
+- CLI d'entraînement (`scripts/train.py`)
+- Pipeline sklearn complet
+- Documentation technique approfondie
 
 **Améliorations ML :**
-- ✅ Feature selection automatisée
-- ✅ Calcul seuil G-mean optimal
-- ✅ Métriques complètes (EvalReport dataclass)
-- ✅ Visualisations automatiques
+- Feature selection automatisée
+- Calcul seuil G-mean optimal
+- Métriques complètes (EvalReport dataclass)
+- Visualisations automatiques
 
 ---
 
-## 🎓 Compétences Démontrées
+## Compétences Démontrées
 
 ### Data Science
 
-- ✅ **Exploration de données** : EDA approfondie, visualisations, statistiques descriptives
-- ✅ **Feature Engineering** : Création de features métier, encodage, normalisation
-- ✅ **Modélisation ML** : Comparaison d'algorithmes, tuning hyperparamètres, validation
-- ✅ **Évaluation** : Métriques adaptées au métier, analyse erreurs, seuils optimaux
-- ✅ **Explicabilité** : SHAP, interprétation features, communication résultats
+- **Exploration de données** : EDA approfondie, visualisations, statistiques descriptives
+- **Feature Engineering** : Création de features métier, encodage, normalisation
+- **Modélisation ML** : Comparaison d'algorithmes, tuning hyperparamètres, validation
+- **Évaluation** : Métriques adaptées au métier, analyse erreurs, seuils optimaux
+- **Explicabilité** : SHAP, interprétation features, communication résultats
 
 ### Engineering
 
-- ✅ **Architecture logicielle** : Code modulaire, design patterns, séparation des responsabilités
-- ✅ **Tests** : Tests unitaires, tests d'intégration, CI/CD
-- ✅ **Déploiement** : Docker, Cloud Run, API REST, monitoring
-- ✅ **Versioning** : Git, Git LFS (pour modèles), branches, pull requests
-- ✅ **Documentation** : README, docstrings, guides utilisateur, architecture
+- **Architecture logicielle** : Code modulaire, design patterns, séparation des responsabilités
+- **Tests** : Tests unitaires, tests d'intégration
+- **Déploiement** : Docker, Cloud Run, API REST, monitoring
+- **Versioning** : Git, Git LFS (pour modèles), branches, pull requests
+- **Documentation** : README, docstrings, guides utilisateur, architecture
 
 ### Business
 
-- ✅ **Compréhension métier** : Analyse coûts/bénéfices, contraintes réglementaires
-- ✅ **Communication** : Présentation résultats, vulgarisation technique
-- ✅ **Impact** : Quantification gains, KPIs business
+- **Compréhension métier** : Analyse coûts/bénéfices, contraintes réglementaires
+- **Communication** : Présentation résultats, vulgarisation technique
+- **Impact** : Quantification gains, KPIs business
 
 ---
 
-## 📦 Livrables
+## Livrables
 
 ### Code Source
 
@@ -571,7 +555,7 @@ Le projet a été **entièrement refactorisé** en novembre 2025 pour :
 
 ---
 
-## 🚀 Pour Aller Plus Loin
+## Pour Aller Plus Loin
 
 ### Améliorations Possibles
 
@@ -613,21 +597,21 @@ Data Scientist
 
 ---
 
-## 📄 Licence
+## Licence
 
 Ce projet a été réalisé dans le cadre de la formation OpenClassrooms.  
 Code disponible sous licence MIT (sauf données Kaggle sous leur propre licence).
 
 ---
 
-**⭐ Points Clés du Projet**
+**Points Clés du Projet**
 
-✅ **ML Production-Ready** : Pipeline complet, testé, déployé  
-✅ **Explicabilité** : SHAP pour transparence réglementaire  
-✅ **Impact Business** : Réduction estimée de 50% des pertes  
-✅ **Architecture Moderne** : Microservices, API REST, Cloud  
-✅ **Qualité Code** : Tests, CI/CD, documentation  
-✅ **Scalabilité** : Cloud Run autoscaling, serverless
+**ML Production-Ready** : Pipeline complet, testé, déployé  
+**Explicabilité** : SHAP pour transparence réglementaire  
+**Impact Business** : Réduction estimée de 50% des pertes  
+**Architecture Moderne** : Microservices, API REST, Cloud  
+**Qualité Code** : Tests, documentation  
+**Scalabilité** : Cloud Run autoscaling, serverless
 
 ---
 
