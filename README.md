@@ -32,7 +32,7 @@ Un système complet de scoring crédit comprenant :
 
 **🔗 Liens Démo :**
 - **Dashboard :** https://francklm3-p7-dashboard-deploy-dashboard-67h1jz.streamlitapp.com/
-- **API :** https://credit-score-api-572900860091.europe-west1.run.app
+- **API :** https://credit-score-api-572900860091.europe-west1.run.app/docs
 
 ---
 
